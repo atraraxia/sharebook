@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/drift.css')}}">
+    <style>
+       .info-form{
+           border:#428bca solid 1px;
+       }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class='container'>
+        <div class="col-md-8 col-md-offset-2">
+                <div>
+                    <div class="alert alert-info " style="text-align: center;font-size: 17px">
+                        向<span style="color: orange">{{ gifter.nickname }}</span>借阅这本书
+                    </div>
+                </div>
+                <div class="alert alert-info" role="alert">
+                <strong>Heads up!</strong> 本次交易将消耗你1个积分，你当前还有{{ user_beans }}个积分
+                </div>
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">以下是书籍拥有者信息，诚信度供你参考:</h3>
+                  </div>
+                  <div class="panel-body" >
+                     <span style="font-size: 15px;">姓名:{{ gifter.nickname }}</span>
+                     <br><br>
+
+                     <span class="description-font" >积分：</span><span style="color: red">{{ gifter.beans }}</span>
+                     <br><br>
+                     <span class="description-font">接受/送出书籍：</span><span  style="color: red">{{ gifter.send_receive }}</span>
+
+                </div>
+                </div>
+
+               <div class="panel panel-primary">
+
+{#                    <div style="margin-top:20px;" class="row">#}
+                        <div class="panel-heading">
+                            <div class="panel-heading">
+                            <h4 class="panel-title" style="text-align: center;">请填写信息</h4>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <form action="" method="post">
+
+                            <div class="col-md-6">
+                                <label>姓名</label>
+                                <input placeholder="请填写姓名" id="recipient_name"
+                                       name="recipient_name"
+                                       class="normal-input btn-block form-control"
+                                       value="{{ form.recipient_name.data | default('', true) }}">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label>联系电话</label>
+                                <input placeholder="如13818181818" id="mobile"
+                                       name="mobile"
+                                       class="normal-input btn-block form-control"
+                                       value="{{ form.mobile.data | default('', true) }}">
+                            </div>
+
+                            <div class="col-md-12" style="margin-top: 15px;">
+                            <label>联系地址</label>
+                                <textarea class="form-control" rows="3" id="address" name="address">
+                            {{ form.address.data | default('',true) }}
+                                </textarea>
+                            </div>
+
+
+                            <div class="col-md-12" style="margin-top: 15px;">
+                            <label>对他 / 她 说的话</label>
+                            <textarea class="form-control" id="message" name="message" rows="4"
+                                  placeholder="说点能打动她/他的话吧">{{ form.message.data | default('',true) }}</textarea>
+                            </div>
+{#                    </div>#}
+
+                        <div class="row">
+                            <div style="position: relative;left:-20px;"
+                                 class="col-md-5 col-md-offset-4 flex-vertical text-center">
+                                <input style="margin-top:20px;" type="submit"
+                                       class="btn btn-warning" value="提交">
+                            <span style="margin-top:15px;color: #1F4788;">提交信息，等待{{ gifter.nickname }}同意借书给你</span>
+                            </div>
+                        </div>
+                        </form>
+                  </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='common/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/drift.js') }}"></script>
+{% endblock %}

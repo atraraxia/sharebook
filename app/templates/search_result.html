@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{url_for('static',filename = 'css/search-result.css')}}">
+    <style>
+     .thumbail:hover img{opacity:0.8}
+    </style>
+{% endblock %}
+{% block content %}
+    {{ super() }}
+    <div class='container'>
+    <div style="margin-top:20px;" class="row flex-vertical-center">
+        <div class="col-md-8">
+            <span class="sub-title">搜索 <span class="space highlight"
+                                             id="keyword">{{ books.keyword }}</span>的结果</span>
+        </div>
+        <div class="col-md-2 col-md-offset-3 ">
+            <span class="sub-title"> 共 <span class="space "
+                                             id="total">{{ books.total }}</span> 条记录</span>
+        </div>
+    </div>
+    <hr>
+    {% for book in books.books %}
+        <div class="row col-padding" >
+            <a href="{{ url_for('views.book_detail', isbn=book.isbn) }}" class="">
+                <div class="col-md-2 thumbail" >
+                    <img class="book-img-small shadow" src="{{ book.image }}">
+                </div>
+                <div class="col-md-7 flex-vertical description-font">
+                    <span class="title">{{ book.title }}</span>
+{#                    <span>{{ [book.author | d(''), book.publisher | d('', true) , '￥' + book.price | d('')] | join(' / ') }}</span>#}
+                    <span>{{book.intro}}</span>
+                    {% if book.summary %}
+                    <span class="summary">{{ book.summary | truncate(100) }}</span>
+                    {% else %}
+                    <span class="summary">无描述</span>
+                    {% endif %}
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="flex-hor-center">
+            <ul class="pagination" id="pagination"></ul>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='common/jquery.twbsPagination.min.js') }}"></script>
+    <script src="{{ url_for('static', filename="js/util.js") }}"></script>
+    <script src="{{ url_for('static', filename='js/search_result.js') }}"></script>
+{% endblock %}

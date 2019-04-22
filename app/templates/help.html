@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+
+    <div class="container">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">帮助中心</h3>
+            </div>
+            <div class="panel-body">
+                <span>1.借书 ：可以先在最近出借中浏览是否有想借的书，
+                    如没有可以在搜索框中搜索加入此书到我的心愿，等到有人出借时，会提醒当前有人可借
+                </span>
+                <hr>
+                <span>2.出借书：可以先在搜索框中搜索想要出借的书籍，若没有搜到，可以在我想出借中，
+                    根据提示添加相应数据，便可添加到我的出借清单中
+                </span>
+                <hr>
+                <span>
+                    3.将书籍“加入到出借清单” 即可获得0.5个积分。务必确保你愿意出借此书。
+                </span>
+                <hr>
+                <span>
+                    4.每成功借出一本图书，将额外赠送你1个积分。
+                </span>
+                <hr>
+                <span>
+                    5.每请求1本书，需要消耗1个积分,当你已经请求两本书时，你必须先出借1本书籍
+                </span>
+                <hr>
+            </div>
+        </div>
+    </div>
+{% endblock %}

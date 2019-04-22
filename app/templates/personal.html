@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/personal.css')}}">
+{% endblock %}
+{% block content %}
+    <div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2"
+             style="border: #d5daff solid 20px;height: 500px;">
+            <div>
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-4 text-center">
+                        <span class="big-title">个人中心</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2 flex-vertical personal-detail">
+                        <div><span>用户名:</span><span>{{ user.nickname }}</span></div>
+                        <div><span>借出/借到：</span><span>{{ user.send_receive }}</span></div>
+                        <div><span>当前积分：</span><span>{{ user.beans }}</span></div>
+                        <div><span>我想借阅个数：</span><span>{{ wishes | length }} </span></div>
+                        <div><span>我的出借个数：</span><span>{{ gifts | length }} </span></div>
+                        <div><span>登录邮箱：</span><span>{{ user.email }}</span></div>
+                        <div><span>密码修改：</span><a
+                                href="{{ url_for('views.change_password') }}">修改</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pending.css')}}">
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="alert alert-info" role="alert" style="text-align: center">
+          <strong>Heads up!</strong>
+            请务必确认愿意出借此书，并需正确填写书籍号
+        </div>
+    </div>
+
+
+    <div class="row" style="margin-top: 50px">
+        <div class="col-md-6 col-md-offset-3">
+            <div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <span class="alert alert-warning">书籍号填写</span>
+                        <img src="{{ url_for('static', filename='images/shujihao.jpg') }}" style="margin-top: 20px;">
+                    </div>
+                    <div class="col-md-8 flex-vertical input-margin">
+                        <form action="" method="post" enctype=multipart/form-data>
+                            <input name="title" type="text"
+                                   placeholder="书名"
+                                   class="form-control none-input"/>
+                            <input name="isbn" type="text"
+                                   placeholder="书号"
+                                   class="form-control none-input"/>
+                            <input name="author" type="text"
+                                   placeholder="作者"
+                                   class="form-control none-input"/>
+                            <input name="publisher" type="text"
+                                   placeholder="出版社"
+                                   class="form-control none-input"/>
+                            <input name="summary" type="text"
+                                   placeholder="书籍简介"
+                                   class="form-control none-input"/>
+                            <label>上传图书图片</label>
+                            <input name="image" type="file"
+                                   placeholder="上传图书图片">
+                            <input style="margin-top:15px;"
+                                   type="submit"
+                                   class="btn btn-primary btn-block" value="提交">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+{% endblock %}

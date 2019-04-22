@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="login_form_bg">
+        <div class="login_form_wrap container">
+
+            <div class="container login_form">
+                <div class="login_title clearfix">
+                    <h1>用户登录</h1>
+                    <a href="{{ url_for('views.register') }}">立即注册</a>
+                </div>
+                <div class="form_input">
+
+                    <form action="" method="post">
+                            <input style="width:100%" id="email" name="email" type="text"
+                                   placeholder="邮箱"
+                                   class="none-input"
+                                   value="{{ form.data['email'] | default('',true) }}">
+                            <div style="margin-top:3px;" class="password-box">
+                                <input id="password"
+                                       name="password"
+                                       placeholder="密码"
+                                       class="none-input" type="password">
+                                <div class="more_input">
+                                    <input type="checkbox" name="">
+                                    <label>记住用户名</label>
+                                    <a id="forget-password" class="description-font"
+                                   href="{{ url_for('views.forget_password_request') }}">忘记密码</a>
+                                </div>
+                            </div>
+                            <input style="margin-top:15px;" id="btn-submit" type="submit"
+                                   class="input_submit" value="登录">
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+{% endblock %}

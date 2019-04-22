@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/not-enough.css')}}">
+    <style>
+       .tabwidth {
+          font-size: 14px;
+       }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container">
+    <div style="margin-top:60px;" class="row">
+        <div class="col-md-12 flex-vertical main-color">
+            <span class="large-title glyphicon glyphicon-warning-sign" aria-hidden="true" style="margin-bottom: 10px; color:#6437ac;">
+                你没有足够的积分或超过限制</span>
+        </div>
+        <div></div>
+    </div>
+    <hr>
+
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h3 class="panel-title">当前你有{{ beans }}个积分</h3>
+      </div>
+      <div class="panel-body">
+         <span class="main-color">
+                温馨提示：每请求1本书，需要消耗1个积分；当你已经请求两本书时，你必须先出借1本书籍。
+         </span>
+      </div>
+    </div>
+    <div class="row">
+        <div style="margin-top:20px;margin-bottom:30px;font-size: 16px;" class="col-md-4">
+            <span class="glyphicon glyphicon-comment"> 以下是获取积分的方式</span>
+        </div>
+    </div>
+
+
+    <div>
+    <table class="table table-bordered tabwidth">
+     <tbody>
+      <tr>
+          <td>上传图书</td>
+          <td>在搜索框内搜索书籍，并将书籍“加入到出借清单” 即可获得0.5个积分。务必确保你愿意出借此书。</td>
+      </tr>
+      <tr class="info">
+          <td>出借图书</td>
+          <td>每成功借出一本图书，将额外赠送你1个积分。</td>
+      </tr>
+     </tbody>
+    </table>
+    </div>
+    </div>
+{% endblock %}

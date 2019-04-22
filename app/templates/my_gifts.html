@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    {{ super() }}
+    <div class="container">
+    <div class="row flex-vertical-center">
+        <div style="margin-top:20px;" class="col-md-6">
+            <span class="sub-title">我想出借的书籍  共  {{ gifts | length }} 本</span>
+            <hr>
+        </div>
+    </div>
+    {% for gift in gifts %}
+        <div class="row">
+            <a href="{{ url_for('views.book_detail', isbn=gift.books.isbn) }}" class="">
+                <div style="margin-bottom:30px;" class="col-md-9 col-padding">
+                    <div class="col-md-2">
+                        <img class="book-img-small shadow" src="{{ gift.books.image }}">
+                    </div>
+                    <div style="margin-top:6px;" class="col-md-6 flex-vertical">
+                            <span id="title"
+                                  class="book-middle-title">{{ gift.books.title }}</span>
+                        <div style="margin-top:6px;"
+                             class="flex-vertical description-font">
+                            <span id="author">{{ gift.books.author }}</span>
+                            <span id="publisher">{{ gift.books.publisher }}</span>
+                        </div>
+                        <a class="btn btn-warning" style="width: 50px;height: 30px; margin-top:30px;"
+                           href="{{ url_for('views.redraw_from_gifts', gid=gift.id) }}">
+                            撤销
+                        </a>
+                    </div>
+                    <div class="col-md-3 flex-vertical">
+                        {% if gift.want %}
+                            <a href="{{ url_for('views.book_detail', isbn=gift.books.isbn) }}">
+                                <span class="label label-info" style="margin-left: -100px;font-size: 15px;">{{ gift.want }}人想借阅</span>
+
+                            </a>
+                        {% else %}
+                            <span class="label label-info" style="margin-left: -155px;font-size: 15px;width: 120px;">暂无人想借阅</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename="js/util.js") }}"></script>
+    <script src="{{ url_for('static', filename='js/search_result.js') }}"></script>
+{% endblock %}
