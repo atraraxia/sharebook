@@ -26,6 +26,9 @@ def search():
         book=Book.query.filter_by(title=q).all()
         if book:
             books=book
+            key=q
+            num=len(book)
+
         else:
             isbn_or_key = is_isbn_or_key(q)
             share_book = ShareBooks()
@@ -36,11 +39,14 @@ def search():
                 share_book.search_by_keyword(q, page)
 
             books.fill(share_book, q)
+            key=books.keyword
+            num=books.total
             Book.insert_into_sql(books.books)
-            print(books.total)
+            books=books.books
+
     else:
         flash("搜索的关键字不符合要求，请重新输入关键字")
-    return render_template('search_result.html', books=books)
+    return render_template('search_result.html',keyword=key,total=num ,books=books)
 
 
 @web.route('/book/<isbn>/detail')

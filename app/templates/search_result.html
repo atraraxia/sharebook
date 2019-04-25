@@ -12,15 +12,15 @@
     <div style="margin-top:20px;" class="row flex-vertical-center">
         <div class="col-md-8">
             <span class="sub-title">搜索 <span class="space highlight"
-                                             id="keyword">{{ books.keyword }}</span>的结果</span>
+                                             id="keyword">{{keyword }}</span>的结果</span>
         </div>
         <div class="col-md-2 col-md-offset-3 ">
             <span class="sub-title"> 共 <span class="space "
-                                             id="total">{{ books.total }}</span> 条记录</span>
+                                             id="total">{{total }}</span> 条记录</span>
         </div>
     </div>
     <hr>
-    {% for book in books.books %}
+    {% for book in books %}
         <div class="row col-padding" >
             <a href="{{ url_for('views.book_detail', isbn=book.isbn) }}" class="">
                 <div class="col-md-2 thumbail" >

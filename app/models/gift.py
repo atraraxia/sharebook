@@ -14,9 +14,7 @@ class Gift(Base):
     launched = Column(Boolean, default=False)
     user = relationship('User')
     uid = Column(Integer, ForeignKey('user.id'))
-
     isbn = Column(String(15), nullable=False)
-
     def is_yourself_gift(self, uid):
         return True if self.uid == uid else False
 

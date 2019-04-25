@@ -16,7 +16,7 @@ def send_email(to, subject, template, **kwargs):
     app = current_app._get_current_object()
     thr = Thread(target=send, args=[app, msg])
     thr.start()
-    mail.send(msg)
+    # mail.send(msg)
 #
 def send(app, msg):
     with app.app_context():

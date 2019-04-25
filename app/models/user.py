@@ -27,8 +27,6 @@ class User(UserMixin, Base):
     beans = Column(Float, default=0)
     send_counter = Column(Integer, default=0)
     receive_counter = Column(Integer, default=0)
-    wx_open_id = Column(String(50))
-    wx_name = Column(String(32))
 
     def can_send_drift(self):
         if self.beans < 1:

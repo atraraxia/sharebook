@@ -35,7 +35,6 @@ class ShareBooks(object):
     def search_by_keyword(self, keyword, page=1):
         url = self.keyword_url.format(keyword, current_app.config['PER_PAGE'], ShareBooks.calculate_start(page))
         result = Http.get(url)
-
         self._fill_collection(result)
 
     @property
