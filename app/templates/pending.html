@@ -18,7 +18,7 @@
                         <img class="book-img-small shadow" src="{{ drift.book_img }}">
                     </div>
                     <div style="margin-left:-30px;"
-                         class="col-md-8 flex-vertical description">
+                         class="col-md-4 flex-vertical description">
                         <div><span>书籍名：</span><span>{{ drift.book_title }}</span></div>
                         <div><span>作者：</span><span>{{ drift.book_author }}</span></div>
                         <div><span>发起日期：</span><span>{{ drift.date }}</span></div>
@@ -37,14 +37,14 @@
                         </div>
                         <div><span>联系电话：</span><span>{{ drift.mobile }}</span></div>
                     </div>
-                    <div class="col-md-2 flex-vertical">
+                    <div class="col-md-6 flex-vertical">
                         {% if drift.you_are == 'gifter' %}
                             {% if drift.status.value == 1 %}
                                 <a href="{{ url_for('views.mailed_drift', did=drift.drift_id) }}">
-                                    <span class="btn-normal">已邮寄</span>
+                                    <span class="btn btn-primary">同意</span>
                                 </a>
                                 <a style="margin-top:20px;" href="{{ url_for('views.reject_drift', did=drift.drift_id) }}">
-                                    <span class="btn-shadow">拒&nbsp;&nbsp;&nbsp;绝</span>
+                                    <span class="btn btn-warning">拒绝</span>
                                 </a>
                             {% endif %}
                         {% endif %}

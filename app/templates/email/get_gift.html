@@ -1,5 +1,5 @@
 <p>{{ gift.user.nickname }}用户</p>
-<p>{{ wisher.nickname }} 想要一本《{{ gift.book.title }}》
+<p>{{ wisher.nickname }} 想要一本《{{ gift.books.title }}》
     .你刚好有这本书在共享书籍服务平台等待出借。</p>
 <p>点击<a href="{{ url_for('views.pending', _external=True) }}">这里</a>
     查看借阅人的信息，以便联系

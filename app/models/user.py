@@ -12,6 +12,7 @@ from app.helper.lib import is_isbn_or_key
 from app.models.drift import Drift
 from app.models.gift import Gift
 from app.models.wish import Wish
+from app.models.book import Book
 from app.spider.share_book import ShareBooks
 from . import Base, login_manager, db
 
@@ -62,15 +63,25 @@ class User(UserMixin, Base):
     def can_save_to_list(self, isbn):
         if is_isbn_or_key(isbn) != 'isbn':
             return False
-        yushu_book = ShareBooks()
-        yushu_book.search_by_isbn(isbn)
-        if not yushu_book.first:
+        share_book = ShareBooks()
+        share_book.search_by_isbn(isbn)
+        book = Book.query.filter_by(isbn=isbn).first()
+        if book:
+            gifting = Gift.query.filter_by(uid=self.id, isbn=isbn, launched=False).first()
+            wishing = Wish.query.filter_by(uid=self.id, isbn=isbn, launched=False).first()
+            if gifting or wishing:
+                return False
+            return True
+        elif share_book.first:
+
+            gifting = Gift.query.filter_by(uid=self.id, isbn=isbn, launched=False).first()
+            wishing = Wish.query.filter_by(uid=self.id, isbn=isbn, launched=False).first()
+            if gifting or wishing:
+                return False
+            return True
+        else:
             return False
-        gifting = Gift.query.filter_by(uid=self.id, isbn=isbn, launched=False).first()
-        wishing = Wish.query.filter_by(uid=self.id, isbn=isbn, launched=False).first()
-        if gifting or wishing:
-            return False
-        return True
+
 
     def generate_token(self, expiration=600):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)

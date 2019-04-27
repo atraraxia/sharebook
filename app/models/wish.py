@@ -1,9 +1,9 @@
 
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, desc, func
 from sqlalchemy.orm import relationship
-
 from app.spider.share_book import ShareBooks
 from . import Base, db
+from app.models.book import Book
 
 
 class Wish(Base):
@@ -19,6 +19,18 @@ class Wish(Base):
         share_book.search_by_isbn(self.isbn)
         return share_book.first
 
+
+    @property
+    def books(self):
+        book = Book.query.filter_by(isbn=self.isbn).first()
+        return book
+
+    @property
+    def want(self):
+        from app.models.gift import Gift
+        gift=Gift.query.filter_by(isbn=self.isbn).all()
+        return len(gift)
+
     @classmethod
     def get_user_wishes(cls, uid):
         wishes = Wish.query.filter_by(uid=uid, launched=False).order_by(desc(Wish.create_time)).all()
@@ -32,3 +44,12 @@ class Wish(Base):
                                                                              Gift.status == 1).group_by(Gift.isbn).all()
         count_list = [{'count': w[0], 'isbn': w[1]} for w in count_list]
         return count_list
+
+    @classmethod
+    def gifts_counts(cls, isbn_list):
+        from app.models.gift import Gift
+        count_list = db.session.query(func.count(Gift.id), Gift.isbn).filter(Gift.launched == False,
+                                                                             Gift.isbn.in_(isbn_list),
+                                                                             Gift.status == 1).group_by(Gift.isbn).all()
+        count = [ w[0] for w in count_list]
+        return count

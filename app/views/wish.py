@@ -14,11 +14,9 @@ from .blueprint import web
 @login_required
 def my_wish():
     uid = current_user.id
-    wishes_of_mine = Wish.get_user_wishes(uid)
-    isbn_list = [wish.isbn for wish in wishes_of_mine]
-    gift_count_list = Wish.get_gifts_counts(isbn_list)
-    view_model = MyTrades(wishes_of_mine, gift_count_list)
-    return render_template('my_wish.html', wishes=view_model.trades)
+    wishes_mine = Wish.get_user_wishes(uid)
+
+    return render_template('my_wish.html', wishes=wishes_mine)
 
 
 @web.route('/wish/book/<isbn>')

@@ -10,6 +10,7 @@ from app.models.drift import Drift
 from app.models.gift import Gift
 from app.models.user import User
 from app.models.wish import Wish
+from app.models.book import Book
 from app.view_models.book import BookViewModel
 from app.view_models.drift import DriftCollection
 from .blueprint import web
@@ -21,14 +22,26 @@ from app.models import db
 def send_drift(gid):
     form = DriftForm(request.form)
     current_gift = Gift.query.get_or_404(gid)
-    if current_gift.is_yourself_gift(current_user.id):
+    uid=current_user.id
+    if current_gift.is_yourself_gift(uid):
         flash('这本书是你自己的')
         return redirect(url_for('views.book_detail', isbn=current_gift.isbn))
     can = current_user.can_send_drift()
+    print(can)
     if not can:
         return render_template('not_enough_beans.html', beans=current_user.beans)
-
+    wish = Wish.query.filter_by(isbn=current_gift.isbn, uid=uid).first()
+    if wish:
+        pass
+    else:
+        with db.auto_commit():
+            wish = Wish()
+            wish.isbn =current_gift.isbn
+            wish.uid = current_user.id
+            db.session.add(wish)
+    print(wish)
     if request.method == 'POST' and form.validate():
+
         save_dirft(form, current_gift)
         try:
             flash("提交成功")
@@ -77,12 +90,15 @@ def redraw_drift(did):
 def mailed_drift(did):
     with db.auto_commit():
         drift = Drift.query.filter_by(gifter_id=current_user.id, id=did).first_or_404()
+        print(drift)
         drift.pending = PendingStatus.Success
+        print(drift.pending)
         current_user.beans += 1
         gift = Gift.query.filter_by(id=drift.gift_id).first_or_404()
         gift.launched = True
         wish = Wish.query.filter_by(isbn=drift.isbn, uid=drift.requester_id, launched=False).first_or_404()
         wish.launched = True
+        print(wish)
     return redirect(url_for('views.pending'))
 
 
@@ -96,7 +112,8 @@ def save_dirft(form, current_gift):
         dirft.gifter_id = current_gift.user.id
         dirft.gifter_nickname = current_gift.user.nickname
 
-        book = BookViewModel(current_gift.book)
+        gift= current_gift
+        book=Book.query.filter_by(isbn=gift.isbn).first()
         dirft.book_title = book.title
         dirft.book_author = book.author
         dirft.book_img = book.image

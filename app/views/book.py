@@ -54,8 +54,8 @@ def book_detail(isbn):
     has_in_gifts = False
     has_in_wishes = False
 
-    yushu_book = ShareBooks()
-    yushu_book.search_by_isbn(isbn)
+    share_book = ShareBooks()
+    share_book.search_by_isbn(isbn)
 
     if current_user.is_authenticated:
         # 如果未登录，current_user将是一个匿名用户对象
@@ -66,16 +66,41 @@ def book_detail(isbn):
                                 launched=False).first():
             has_in_wishes = True
 
-    book = BookViewModel(yushu_book.first)
+    book1=Book.query.filter_by(isbn=isbn).first()
+    user_wishes = Wish.query.filter_by(isbn=isbn, launched=False).all()
+    user_gifts = Gift.query.filter_by(isbn=isbn, launched=False).all()
+    wishs_total = len(user_wishes)
+    gifts_total = len(user_gifts)
 
-    trade_wishes = Wish.query.filter_by(isbn=isbn, launched=False).all()
-    trade_gifts = Gift.query.filter_by(isbn=isbn, launched=False).all()
-    trade_wishes_model = TradeInfo(trade_wishes)
-    trade_gifts_model = TradeInfo(trade_gifts)
-    return render_template('book_detail.html', book=book, has_in_gifts=has_in_gifts,
+
+    if book1:
+        book=book1
+        _wish=[]
+        for i in user_wishes:
+            _wish.append(TradeInfo._map_to_trade(i))
+
+        _gift=[]
+        for i in user_gifts:
+            _gift.append(TradeInfo._map_to_trade(i))
+
+    else:
+        book = BookViewModel(share_book.first)
+        _wish_of_user = TradeInfo(user_wishes)
+        _gift_of_user = TradeInfo(user_gifts)
+
+        _wish=_wish_of_user .trades
+        _gift=_gift_of_user.trades
+
+
+    return render_template('book_detail.html',
+                           book=book,
+                           has_in_gifts=has_in_gifts,
                            has_in_wishes=has_in_wishes,
-                           wishes=trade_wishes_model,
-                           gifts=trade_gifts_model)
+                           wishes_total=wishs_total,
+                           gifts_total=gifts_total,
+                           wishes=_wish,
+                           gifts=_gift
+                           )
 
 
 @web.route('/book/uplode',methods=['GET', 'POST'])
@@ -106,6 +131,7 @@ def book_uplode():
                 book.publisher=form.publisher.data
                 book.summary=form.summary.data
                 db.session.add(book)
+                flash("提交成功")
 
         if Gift.query.filter_by(isbn=book.isbn, uid=uid,launched=False).first():
             flash('这本书已经添加至你的赠送清单或已存在于你的心愿清单，请不要重复添加')

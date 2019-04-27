@@ -21,10 +21,6 @@ class Gift(Base):
     @property
     def book(self):
         share_book = ShareBooks()
-        # book = Book.query.filter_by(isbn=self.isbn).first()
-        # if book:
-        #     return book
-        # else:
         share_book.search_by_isbn(self.isbn)
         return share_book.first
 

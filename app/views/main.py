@@ -25,8 +25,6 @@ def personal_center():
     uid = current_user.id
     cur_user = User.query.get_or_404(uid)
     user = cur_user.summary
-    # summary返回一个自定义的字典，详情在user模型下
-    # b = a.summary
     gifts = Gift.get_user_gifts(uid)
     wishes = Wish.get_user_wishes(uid)
     return render_template('personal.html', user=user,gifts=gifts,wishes=wishes)  # 网页模板下
