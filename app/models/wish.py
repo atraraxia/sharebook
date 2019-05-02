@@ -32,7 +32,7 @@ class Wish(Base):
         return len(gift)
 
     @classmethod
-    def get_user_wishes(cls, uid):
+    def get_person_wishes(cls, uid):
         wishes = Wish.query.filter_by(uid=uid, launched=False).order_by(desc(Wish.create_time)).all()
         return wishes
 

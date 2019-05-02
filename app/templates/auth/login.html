@@ -18,15 +18,14 @@
                     <form action="" method="post">
                             <input style="width:100%" id="email" name="email" type="text"
                                    placeholder="邮箱"
-                                   class="none-input"
-                                   value="{{ form.data['email'] | default('',true) }}">
+                                   class="none-input">
                             <div style="margin-top:3px;" class="password-box">
                                 <input id="password"
                                        name="password"
                                        placeholder="密码"
                                        class="none-input" type="password">
                                 <div class="more_input">
-                                    <input type="checkbox" name="">
+                                    <input type="checkbox" name="remember_me">
                                     <label>记住用户名</label>
                                     <a id="forget-password" class="description-font"
                                    href="{{ url_for('views.forget_password_request') }}">忘记密码</a>

@@ -72,7 +72,6 @@ def book_detail(isbn):
     wishs_total = len(user_wishes)
     gifts_total = len(user_gifts)
 
-
     if book1:
         book=book1
         _wish=[]
@@ -106,42 +105,42 @@ def book_detail(isbn):
 @web.route('/book/uplode',methods=['GET', 'POST'])
 @login_required
 def book_uplode():
-    form = LengForm(request.form)
-    book = Book()
+    book_form = LengForm(request.form)
+    my_book = Book()
     uid = current_user.id
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST' and book_form.validate():
 
         image=request.files['image']
-        fname=image.filename
+        image_fname=image.filename
         UPLOAD_FOLDER = current_app.config['UPLOAD_FOLDER']
         ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'jpg']
-        flag = '.' in fname and fname.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+        flag = '.' in image_fname and image_fname.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
         if not flag:
             flash('文件类型错误,请检查上传的图片类型，仅限于png、PNG、jpg、JPG')
             return redirect(url_for('views.book_uplode'))
-        if Book.query.filter_by(isbn=book.isbn).first():
+        if Book.query.filter_by(isbn=book_form.isbn.data).first():
             flash("已经存在这本书了，快去搜索栏搜索吧")
         else:
             with db.auto_commit():
-                image.save('{}{}'.format(UPLOAD_FOLDER, fname))
-                book.image = '/static/uplode/{}'.format(fname)
-                book.title=form.title.data
-                book.author=form.author.data
-                book.isbn=form.isbn.data
-                book.publisher=form.publisher.data
-                book.summary=form.summary.data
-                db.session.add(book)
+                image.save('{}{}'.format(UPLOAD_FOLDER,image_fname))
+                my_book.image = '/static/uplode/{}'.format(image_fname)
+                my_book.title=book_form.title.data
+                my_book.author=book_form.author.data
+                my_book.isbn=book_form.isbn.data
+                my_book.publisher=book_form.publisher.data
+                my_book.summary=book_form.summary.data
+                db.session.add(my_book)
                 flash("提交成功")
 
-        if Gift.query.filter_by(isbn=book.isbn, uid=uid,launched=False).first():
+        if Gift.query.filter_by(isbn=my_book.isbn, uid=uid,launched=False).first():
             flash('这本书已经添加至你的赠送清单或已存在于你的心愿清单，请不要重复添加')
         else:
             with db.auto_commit():
                 gift = Gift()
-                gift.isbn = form.isbn.data
+                gift.isbn = book_form.isbn.data
                 gift.uid = uid
                 current_user.beans += current_app.config['BEANS_UPLOAD_ONE_BOOK']
                 db.session.add(gift)
 
         return redirect(url_for('views.book_uplode'))
-    return render_template('book_uplode.html', form=form)
+    return render_template('book_uplode.html', form=book_form)

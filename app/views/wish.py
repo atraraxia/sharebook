@@ -14,7 +14,7 @@ from .blueprint import web
 @login_required
 def my_wish():
     uid = current_user.id
-    wishes_mine = Wish.get_user_wishes(uid)
+    wishes_mine = Wish.get_person_wishes(uid)
 
     return render_template('my_wish.html', wishes=wishes_mine)
 

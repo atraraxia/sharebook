@@ -26,7 +26,7 @@ class PendingStatus(Enum):
             },
             cls.Success: {
                 'requester': '对方已同意',
-                'gifter': '你已同意，交易完成'
+                'gifter': '你已同意'
             },
             cls.Connection:{
                 'requester':"对方已收到书",

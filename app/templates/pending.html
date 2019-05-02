@@ -2,6 +2,12 @@
 {% block head %}
     {{ super() }}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/pending.css')}}">
+    <style>
+       .alert{
+           padding: 8px;
+       }
+
+    </style>
 {% endblock %}
 {% block content %}
     <div class="container">
@@ -11,16 +17,33 @@
         </div>
     </div>
     {% for drift in drifts %}
-        <div style="margin-top:20px;" class="row drift-container">
-            <div class="col-md-12">
-                <div class="row">
+        <div style="margin-top:20px;" class="row drift-container panel panel-info">
+                <div class="row panel-heading">
+                    <div>
+                        {% if drift.you_are == 'receiver' %}
+                            {% set message_flag = '他想对你说的话：' %}
+                        {% else %}
+                            {% set message_flag = '你想对他说的话：' %}
+                        {% endif %}
+                        <p><span
+                                class="message-flag">{{ message_flag }}</span>
+                            <span>{{ drift.message }}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="row panel-body">
                     <div class="col-md-2">
                         <img class="book-img-small shadow" src="{{ drift.book_img }}">
+                        <div style="margin-top: 25px">
+                           <span class="alert alert-danger ">
+                               <strong>状态:</strong>
+                               {{ drift.status_str }}
+                           </span>
+                       </div>
                     </div>
                     <div style="margin-left:-30px;"
                          class="col-md-4 flex-vertical description">
                         <div><span>书籍名：</span><span>{{ drift.book_title }}</span></div>
-                        <div><span>作者：</span><span>{{ drift.book_author }}</span></div>
                         <div><span>发起日期：</span><span>{{ drift.date }}</span></div>
                         <div>
                             {% if drift.you_are == 'requester' %}
@@ -30,12 +53,14 @@
                             {% endif %}
                             <span>{{ drift.operator }}</span>
                         </div>
-                        <div><span>状态：</span><span
-                                class="status-color">{{ drift.status_str }}</span></div>
+
+                        <div><span>联系人：</span><span
+                                class="alert-warning">{{ drift.recipient_name }}</span></div>
                         <div><span>联系地址：</span><span
-                                class="space">{{ drift.recipient_name }}</span><span>{{ drift.address }}</span>
+                                class="space">{{ drift.address }}</span>
                         </div>
-                        <div><span>联系电话：</span><span>{{ drift.mobile }}</span></div>
+                        <div><span>联系电话：</span><span class="alert-warning">{{ drift.mobile }}</span></div>
+
                     </div>
                     <div class="col-md-6 flex-vertical">
                         {% if drift.you_are == 'gifter' %}
@@ -57,21 +82,9 @@
                         {% endif %}
                     </div>
                 </div>
-                <div style="margin-top:20px;" class="row message-container">
-                    <div class="col-md-12">
-                        {% if drift.you_are == 'receiver' %}
-                            {% set message_flag = '他的留言：' %}
-                        {% else %}
-                            {% set message_flag = '你的留言：' %}
-                        {% endif %}
-                        <p><span
-                                class="message-flag">{{ message_flag }}</span>
-                            <span>{{ drift.message }}</span>
-                        </p>
-                    </div>
-                </div>
+
             </div>
-        </div>
+
 
     {% endfor %}
   </div>

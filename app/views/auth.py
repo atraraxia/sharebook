@@ -11,56 +11,61 @@ from app.helper.email import send_email
 
 @web.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegisterForm(request.form)
-    if request.method == 'POST' and form.validate():
+    user_form = RegisterForm(request.form)
+    if request.method == 'POST' and user_form.validate():
         with db.auto_commit():
-            user = User()
-            user.set_attrs(form.data)
-            db.session.add(user)
+            user_info = User()
+            user_info.email=user_form.email.data
+            user_info.password=user_form.password.data
+            user_info.nickname=user_form.nickname.data
+            db.session.add(user_info)
         return redirect(url_for('views.login'))
 
-    return render_template('auth/register.html', form=form)
+    return render_template('auth/register.html', form=user_form)
 
 
 @web.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm(request.form)
-    if request.method == 'POST' and form.validate():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user, remember=True)
+    login_form = LoginForm(request.form)
+    if request.method == 'POST' and login_form.validate():
+        user_email=login_form.email.data
+        user_pwd=login_form.password.data
+        user = User.query.filter_by(email=user_email).first()
+        if user and user.user_check_password(user_pwd):
+            remeber_me=login_form.remember_me.data
+            login_user(user, remember=remeber_me)
             next = request.args.get('next')
             if not next or not next.startswith('/'):
                 next = url_for('views.index')
             return redirect(next)
         else:
             flash('账号不存在或密码错误')
-    return render_template('auth/login.html', form=form)
+    return render_template('auth/login.html', form=login_form)
 
 
 @web.route('/reset/password', methods=['GET', 'POST'])
 def forget_password_request():
-    form = EmailForm(request.form)
-    if request.method == 'POST' and form.validate():
-        account_email = form.email.data
+    Email_form = EmailForm(request.form)
+    if request.method == 'POST' and Email_form.validate():
+        account_email = Email_form.email.data
         user = User.query.filter_by(email=account_email).first_or_404()
-        send_email(form.email.data, '重置你的密码',
+        send_email(Email_form.email.data, '重置你的密码',
                    'email/reset_password.html', user=user, token=user.generate_token())
         flash('以发送邮件到你的邮箱，请及时查收')
-    return render_template('auth/forget_password_request.html', form=form)
+    return render_template('auth/forget_password_request.html', form=Email_form)
 
 
 @web.route('/reset/password/<token>', methods=['GET', 'POST'])
 def forget_password(token):
-    form = ResetPasswordForm(request.form)
-    if request.method == 'POST' and form.validate():
-        success = User.reset_password(token, form.password1.data)
+    Resetform = ResetPasswordForm(request.form)
+    if request.method == 'POST' and Resetform.validate():
+        success = User.reset_password(token, Resetform.password1.data)
         if success:
-            flash('你的密码已经更新，请使用新密码登录')
+            flash('密码已经更新，请使用新密码登录')
             return redirect(url_for('views.login'))
         else:
             flash('密码重置失败')
-    return render_template('auth/forget_password.html', form=form)
+    return render_template('auth/forget_password.html', form=Resetform)
 
 
 @web.route('/change/password', methods=['GET', 'POST'])
@@ -68,10 +73,13 @@ def forget_password(token):
 def change_password():
     form = ChangepasswordForm(request.form)
     if request.method == 'POST' and form.validate():
-        if current_user.check_password(form.old_password.data):
+        now_uid=current_user.id
+        old_pwd=form.old_password.data
+        new_pwd=form.new_password.data
+        if current_user.user_check_password(old_pwd):
             with db.auto_commit():
-                user = User.query.get(current_user.id)
-                user.password = form.new_password.data
+                now_user = User.query.get(now_uid)
+                now_user.password = new_pwd
             logout_user()
             flash('您的密码已重置，请使用新密码登录')
             return redirect(url_for('views.login'))

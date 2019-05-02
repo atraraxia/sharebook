@@ -44,7 +44,7 @@ class Gift(Base):
         return recent_gift
 
     @classmethod
-    def get_user_gifts(cls, uid):
+    def get_person_gifts(cls, uid):
         gifts = Gift.query.filter_by(uid=uid, launched=False).order_by(desc(Gift.create_time)).all()
         return gifts
 

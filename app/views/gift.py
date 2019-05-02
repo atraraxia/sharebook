@@ -14,7 +14,7 @@ from .blueprint import web
 @login_required
 def my_gifts():
     uid = current_user.id
-    gifts_of_mine = Gift.get_user_gifts(uid)
+    gifts_of_mine = Gift.get_person_gifts(uid)
     return render_template('my_gifts.html', gifts=gifts_of_mine)
 
 

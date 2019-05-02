@@ -24,7 +24,7 @@ def index():
 def personal_center():
     uid = current_user.id
     cur_user = User.query.get_or_404(uid)
-    user = cur_user.summary
-    gifts = Gift.get_user_gifts(uid)
-    wishes = Wish.get_user_wishes(uid)
-    return render_template('personal.html', user=user,gifts=gifts,wishes=wishes)  # 网页模板下
+    user_center = cur_user.summary
+    user_gift = Gift.get_person_gifts(uid)
+    user_wishes = Wish.get_person_wishes(uid)
+    return render_template('personal.html', user=user_center,gifts=user_gift,wishes=user_wishes)  # 网页模板下

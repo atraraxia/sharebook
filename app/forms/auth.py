@@ -1,7 +1,6 @@
 
-from wtforms import Form, StringField, PasswordField
+from wtforms import Form, StringField, PasswordField, BooleanField
 from wtforms.validators import Length, DataRequired, Email, ValidationError, EqualTo
-
 from app.models.user import User
 
 
@@ -12,8 +11,13 @@ class EmailForm(Form):
 
 
 class LoginForm(EmailForm):
+    email = StringField(validators=[DataRequired(),
+                                    Length(8, 64, message='密码长度必须在8到64个字符之间'),
+                                    Email(message='电子邮箱不符合规范')])
     password = PasswordField(validators=[DataRequired(message='密码不能为空'),
                                          Length(6, 32, message='密码长度必须在6到32个字符之间')])
+
+    remember_me = BooleanField('remember_me', default = False)
 
 
 class RegisterForm(LoginForm):
