@@ -20,10 +20,10 @@
         <div style="margin-top:20px;" class="row drift-container panel panel-info">
                 <div class="row panel-heading">
                     <div>
-                        {% if drift.you_are == 'receiver' %}
-                            {% set message_flag = '他想对你说的话：' %}
-                        {% else %}
+                        {%  if drift.you_are == 'requester' %}
                             {% set message_flag = '你想对他说的话：' %}
+                        {% else %}
+                            {% set message_flag = '他想对你说的话：' %}
                         {% endif %}
                         <p><span
                                 class="message-flag">{{ message_flag }}</span>
@@ -48,10 +48,14 @@
                         <div>
                             {% if drift.you_are == 'requester' %}
                                 <span>向他请求：</span>
+                                <span>{{ drift.gifter_nickname }}</span>
+{#                                <span>请求者：</span>#}
+{#                                <span>{{ drift.requester_nickname }}</span>#}
                             {% else %}
                                 <span>请求者：</span>
+                                <span>{{ drift.requester_nickname }}</span>
                             {% endif %}
-                            <span>{{ drift.operator }}</span>
+
                         </div>
 
                         <div><span>联系人：</span><span

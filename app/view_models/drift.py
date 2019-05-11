@@ -45,5 +45,7 @@ class DriftViewModel(object):
             'mobile': drift.mobile,
             'status': drift.pending,
             'status_str': pending_status,
+            'requester_nickname':drift.requester_nickname,
+            'gifter_nickname':drift.gifter_nickname
         }
         return r

@@ -27,4 +27,4 @@ def personal_center():
     user_center = cur_user.summary
     user_gift = Gift.get_person_gifts(uid)
     user_wishes = Wish.get_person_wishes(uid)
-    return render_template('personal.html', user=user_center,gifts=user_gift,wishes=user_wishes)  # 网页模板下
+    return render_template('personal.html', user=user_center,gifts=user_gift,wishes=user_wishes)
