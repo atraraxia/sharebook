@@ -28,7 +28,7 @@ class Wish(Base):
     @property
     def want(self):
         from app.models.gift import Gift
-        gift=Gift.query.filter_by(isbn=self.isbn).all()
+        gift=Gift.query.filter_by(isbn=self.isbn, launched=False).all()
         return len(gift)
 
     @classmethod

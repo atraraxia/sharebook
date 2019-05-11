@@ -76,14 +76,16 @@ def change_password():
         now_uid=current_user.id
         old_pwd=form.old_password.data
         new_pwd=form.new_password.data
+        new_pwd2=form.new_password2.data
         if current_user.user_check_password(old_pwd):
             with db.auto_commit():
                 now_user = User.query.get(now_uid)
                 now_user.password = new_pwd
             logout_user()
             flash('您的密码已重置，请使用新密码登录')
-            return redirect(url_for('views.login'))
-        flash('密码错误，密码更改失败')
+
+        else:
+            flash('密码错误，密码更改失败')
     return render_template('auth/change_password.html')
 
 

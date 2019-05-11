@@ -47,7 +47,7 @@ def send_drift(gid):
             flash("提交成功")
         except:
             flash("请确认信息全部填写")
-        send_email(current_gift.user.email, '有人想要一本书',
+        send_email(current_gift.user.email, '有人想借阅一本书',
                    'email/get_gift.html', wisher=current_user, gift=current_gift)
 
     gifter = current_gift.user.summary
@@ -122,3 +122,5 @@ def save_dirft(form, current_gift):
         current_user.beans -= 1
 
         db.session.add(history_info)
+
+        current_user.phone_number=history_info.mobile

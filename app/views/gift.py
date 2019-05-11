@@ -39,7 +39,7 @@ def redraw_from_gifts(gid):
     gift = Gift.query.filter_by(id=gid, launched=False).first_or_404()
     drift = Drift.query.filter_by(gift_id=gid, pending=PendingStatus.Waiting).first()
     if drift:
-        flash('这本书正处于交易状态，请先完成交易')
+        flash('这本书正处于借阅交易状态，请先完成借阅交易')
     else:
         # with db.auto_commit():
         current_user.beans -= current_app.config['BEANS_UPLOAD_ONE_BOOK']

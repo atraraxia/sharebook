@@ -31,7 +31,7 @@ class Gift(Base):
 
     @property
     def want(self):
-        wish=Wish.query.filter_by(isbn=self.isbn).all()
+        wish=Wish.query.filter_by(isbn=self.isbn, launched=False).all()
         return len(wish)
 
 

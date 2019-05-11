@@ -23,7 +23,7 @@ class Book(Base):
                         continue
             with db.auto_commit():
                 book = Book()
-                book.set_attrs(b.__dict__)  # [b1, b2, b3]
+                book.set_allttrs(b.__dict__)  # [b1, b2, b3]
                 # 类实例化后的一个对象 b.author b.title
                 db.session.add(book)
 
