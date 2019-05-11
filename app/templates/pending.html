@@ -75,6 +75,8 @@
                                 <a style="margin-top:20px;" href="{{ url_for('views.reject_drift', did=drift.drift_id) }}">
                                     <span class="btn btn-warning">拒绝</span>
                                 </a>
+
+
                             {% endif %}
                         {% endif %}
                         {% if drift.you_are == 'requester' %}
@@ -82,6 +84,16 @@
                                 <a href="{{ url_for('views.redraw_drift', did=drift.drift_id) }}">
                                         <span class="btn btn-primary">撤 销</span>
                                 </a>
+
+                            {% elif drift.status.value==2 %}
+                                 <a href="{{ url_for('views.get_book', did=drift.drift_id) }}">
+                                    <span class="btn btn-primary">已收到书，借阅完成</span>
+                                 </a>
+                                 <a style="margin-top:20px;" href="{{ url_for('views.not_book', did=drift.drift_id) }}">
+                                    <span class="btn btn-warning">未收到</span>
+                                 </a>
+
+
                             {% endif %}
                         {% endif %}
                     </div>

@@ -43,6 +43,7 @@ def send_drift(gid):
     if request.method == 'POST' and form.validate():
 
         save_dirft(form, current_gift)
+
         try:
             flash("提交成功")
         except:
@@ -93,6 +94,23 @@ def mailed_drift(did):
         drift = Histoty.query.filter_by(gifter_id=current_user.id, id=did).first_or_404()
         drift.pending = PendingStatus.Success
         current_user.beans += 1
+        # current_user.send_counter+=1
+        # gift = Gift.query.filter_by(id=drift.gift_id).first_or_404()
+        # gift.launched = True
+        # wish = Wish.query.filter_by(isbn=drift.isbn, uid=drift.requester_id, launched=False).first_or_404()
+        # wish.launched = True
+        # request_people=User.query.filter_by(id=drift.requester_id).first()
+        # request_people.receive_counter+=1
+    return redirect(url_for('views.pending'))
+
+@web.route('/drift/<int:did>/getbook')
+@login_required
+def get_book(did):
+    with db.auto_commit():
+        drift = Histoty.query.filter_by(id=did, requester_id=current_user.id).first_or_404()
+        drift.pending = PendingStatus.Connection
+        print(drift.pending)
+        current_user.beans += 1
         current_user.send_counter+=1
         gift = Gift.query.filter_by(id=drift.gift_id).first_or_404()
         gift.launched = True
@@ -102,6 +120,14 @@ def mailed_drift(did):
         request_people.receive_counter+=1
     return redirect(url_for('views.pending'))
 
+@web.route('/drift/<int:did>/notbook')
+@login_required
+def not_book(did):
+    with db.auto_commit():
+        drift = Histoty.query.filter_by(id=did, requester_id=current_user.id).first_or_404()
+        drift.pending = PendingStatus.Connection
+        current_user.beans += 1
+    return redirect(url_for('views.pending'))
 
 def save_dirft(form, current_gift):
     with db.auto_commit():
@@ -122,5 +148,3 @@ def save_dirft(form, current_gift):
         current_user.beans -= 1
 
         db.session.add(history_info)
-
-        current_user.phone_number=history_info.mobile
